@@ -63,9 +63,7 @@ lazy val scalaClasses = (project in file("scala"))
       "content-atom-model-thrift",
       "content-entity-thrift"
     ),
-    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
-    // Include the Thrift file in the published jar
-    scroogePublishThrift in Compile := true
+    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value
   )
 
 lazy val thrift = (project in file("thrift"))
