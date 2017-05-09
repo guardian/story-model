@@ -1,6 +1,8 @@
 namespace java com.gu.story.model.v1
 #@namespace scala com.gu.story.model.v1
 
+include "contentatom.thrift"
+
 enum ContentType {
     ARTICLE = 0,
     LIVEBLOG = 1,
@@ -39,4 +41,6 @@ struct Story {
         3: required string summary
 
         4: required list<StoryEvent> events
+
+        5: required list<contentatom.Atom> atoms
 }
