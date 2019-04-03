@@ -3,7 +3,8 @@ import ReleaseStateTransformations._
 
 val commonSettings = Seq(
   organization := "com.gu",
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.8",
+  crossScalaVersions := Seq("2.11.12", "2.12.8"),
   scmInfo := Some(ScmInfo(url("https://github.com/guardian/story-model"),
       "scm:git:git@github.com:guardian/story-model.git")),
 
@@ -20,6 +21,10 @@ val commonSettings = Seq(
 
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
 
+  resolvers ++= Seq(Resolver.sonatypeRepo("public")),
+
+  publishTo := sonatypePublishTo.value,
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
@@ -32,7 +37,7 @@ val commonSettings = Seq(
       publishArtifacts,
       setNextVersion,
       commitNextVersion,
-      releaseStepCommand("sonatypeReleaseAll"),
+      releaseStepCommand("sonatypeRelease"),
       pushChanges
   )
 )
@@ -56,8 +61,8 @@ lazy val scalaClasses = (project in file("scala"))
       (scroogeUnpackDeps in Compile).value.flatMap { dir => (dir ** "*.thrift").get }
     },
     libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.9.3",
-        "com.twitter" %% "scrooge-core" % "4.5.0"
+        "org.apache.thrift" % "libthrift" % "0.10.0",
+        "com.twitter" %% "scrooge-core" % "19.3.0"
     ),
     scroogeThriftDependencies in Compile ++= Seq(
       "content-atom-model-thrift",
@@ -76,7 +81,7 @@ lazy val thrift = (project in file("thrift"))
     publishArtifact in packageDoc := false,
     publishArtifact in packageSrc := false,
     libraryDependencies ++= Seq(
-      "com.gu" % "content-atom-model-thrift" % "2.4.36"
+      "com.gu" % "content-atom-model-thrift" % "3.0.0"
     ),
     unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
   )
