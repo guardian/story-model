@@ -21,6 +21,10 @@ val commonSettings = Seq(
 
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
 
+  resolvers ++= Seq(Resolver.sonatypeRepo("public")),
+
+  publishTo := sonatypePublishTo.value,
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
