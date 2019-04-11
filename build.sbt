@@ -51,24 +51,18 @@ lazy val root = (project in file("."))
 
 lazy val scalaClasses = (project in file("scala"))
   .settings(commonSettings)
-  .dependsOn(thrift)
   .settings(
     name := "story-model",
     description := "Story model",
     scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
-    scroogeThriftSources in Compile ++= {
-      (scroogeUnpackDeps in Compile).value.flatMap { dir => (dir ** "*.thrift").get }
-    },
     libraryDependencies ++= Seq(
         "org.apache.thrift" % "libthrift" % "0.10.0",
         "com.twitter" %% "scrooge-core" % "19.3.0"
     ),
-    scroogeThriftDependencies in Compile ++= Seq(
-      "content-atom-model-thrift",
-      "content-entity-thrift"
-    ),
-    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value
+    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
+    // Include the Thrift file in the published jar
+    scroogePublishThrift in Compile := true
   )
 
 lazy val thrift = (project in file("thrift"))
