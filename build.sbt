@@ -21,8 +21,6 @@ val commonSettings = Seq(
 
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
 
-  resolvers ++= Seq(Resolver.sonatypeRepo("public")),
-
   publishTo := sonatypePublishTo.value,
   publishConfiguration := publishConfiguration.value.withOverwrite(true),
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
@@ -56,13 +54,20 @@ lazy val scalaClasses = (project in file("scala"))
     description := "Story model",
     scroogeThriftSourceFolder in Compile := baseDirectory.value / "../thrift/src/main/thrift",
     scroogeThriftOutputFolder in Compile := sourceManaged.value,
+    scroogeThriftDependencies in Compile ++= Seq(
+      "content-entity-thrift",
+      "content-atom-model-thrift"
+    ),
+    // Include the Thrift file in the published jar
+    scroogePublishThrift in Compile := true,
+    resolvers ++= Seq(Resolver.sonatypeRepo("public")),
     libraryDependencies ++= Seq(
         "org.apache.thrift" % "libthrift" % "0.10.0",
-        "com.twitter" %% "scrooge-core" % "19.3.0"
+        "com.twitter" %% "scrooge-core" % "19.3.0",
+        "com.gu" % "content-entity-thrift" % "2.0.1",
+        "com.gu" % "content-atom-model-thrift" % "3.0.2",
+        "com.gu" %% "content-atom-model" % "3.0.2"
     ),
-    managedSourceDirectories in Compile += (scroogeThriftOutputFolder in Compile).value,
-    // Include the Thrift file in the published jar
-    scroogePublishThrift in Compile := true
   )
 
 lazy val thrift = (project in file("thrift"))
@@ -74,9 +79,6 @@ lazy val thrift = (project in file("thrift"))
     crossPaths := false,
     publishArtifact in packageDoc := false,
     publishArtifact in packageSrc := false,
-    libraryDependencies ++= Seq(
-      "com.gu" % "content-atom-model-thrift" % "3.0.0"
-    ),
     unmanagedResourceDirectories in Compile += { baseDirectory.value / "src/main/thrift" }
   )
 
