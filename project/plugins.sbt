@@ -13,3 +13,5 @@ addSbtPlugin("com.twitter" % "scrooge-sbt-plugin" % "19.3.0")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
 
+
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.10.0-RC1")
